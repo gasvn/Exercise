@@ -1,5 +1,5 @@
 close all
-clear all
+
 %%================================================================
 %% Step 0: Load data
 %  We have provided the code to load data from pcaData.txt into x.
@@ -21,9 +21,9 @@ title('Raw data');
 
 % -------------------- YOUR CODE HERE -------------------- 
 u = zeros(size(x, 2)); % You need to compute this
-avg=mean(x,2);%求出每一行的平均值，每一行相当于一个样本
-x=x-repmat(avg,1,size(x,2));%size(x,2)求出列数代表特征个数
-sigma=x*x'/size(x,1);%size(x,1)求出行数代表样本个数
+avg=mean(x,2);%求出每一h的平均值，每一列相当于一个样本
+x=x-repmat(avg,1,size(x,2));%size(x,1)求出行数代表特征个数
+sigma=x*x'/size(x,2);%size(x,2)求出列数代表样本个数
 [u,S,V]=svd(sigma);%求出特征向量u
 % -------------------------------------------------------- 
 hold on
@@ -40,6 +40,7 @@ hold off
 % -------------------- YOUR CODE HERE -------------------- 
 xRot = zeros(size(x)); % You need to compute this
 xRot=u'*x; %求出旋转后的矩阵
+rotate = cov(xRot')%*(size(x,2)-1)  
 
 % -------------------------------------------------------- 
 
@@ -73,11 +74,14 @@ title('xHat');
 epsilon = 1e-5;
 % -------------------- YOUR CODE HERE -------------------- 
 xPCAWhite = zeros(size(x)); % You need to compute this
-xPCAWhite=diag(1./sqrt(diag(S)+epsilon))*xRot;%W大写，跟下面一致，为了这个变量差点成了智障
+
+xPCAwhite=diag(1./sqrt(diag(S)+epsilon))*xRot;
+
+PCAWhite = cov(xPCAWhite')%*(size(x,2)-1)  
+
 % -------------------------------------------------------- 
 figure(4);
 scatter(xPCAWhite(1, :), xPCAWhite(2, :));
-
 title('xPCAWhite');
 
 %%================================================================
@@ -86,7 +90,7 @@ title('xPCAWhite');
 
 % -------------------- YOUR CODE HERE -------------------- 
 xZCAWhite = zeros(size(x)); % You need to compute this
-xZCAWhite=u*xPCAWhite;
+
 
 % -------------------------------------------------------- 
 figure(5);
